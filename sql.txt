@@ -64,3 +64,4 @@ LEFT JOIN Session s ON e.event_id =s.event_id
 WHERE e.status='upcoming'
 
 GROUP BY event_id,e.title;
+i m good
