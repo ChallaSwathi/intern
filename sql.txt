@@ -1,0 +1,66 @@
+SELECT * FROM user 
+ORDER BY registration_date ASC,user_id ASC;
+........................................
+SELECT * FROM user
+where feed_back >10;
+.................................
+SELECT f.even_name,e.event_id,AVG(rating) AS rating,COUNT(*) AS total_feed
+FROM feedback f JOIN events e ON f.event_id=e.event_id
+GROUP BY f.event_id,e.event_name
+HAVING COUNT(*)>=4
+ORDER BY rating DESC;
+.....................................
+SELECT u.user_id, u.full_name, u.email, u.city, u.registration_date
+FROM Users u
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Registrations r
+    WHERE r.user_id = u.user_id
+      AND r.registration_date >= CURRENT_DATE - INTERVAL '90 days'
+);
+.....................................
+SELECT 
+    event_id,
+    COUNT(*) AS sessions_between_10_and_12
+FROM 
+    Sessions
+WHERE 
+    TIME(start_time) <= '12:00:00'
+    AND TIME(end_time) >= '10:00:00'
+GROUP BY 
+    event_id;
+..................................
+SELECT u.city,COUNT(DISTINCT r.user_id) AS total
+FROM users u
+JOIN  Registrations r ON u.user_id = r.user_id
+GROUP BY u.city
+ORDER BY 
+total DESC
+LIMIT 5;
+................................
+SELECT r.event_id,COUNT(*) AS RES
+from Event r
+JOIN Res e on r.event_id=e.event_id
+GROUP BY res_id
+ORDER BY RES;
+..................................
+SELECT 
+    u.full_name,
+    f.rating,
+    f.comments,
+    e.title AS event_name
+FROM 
+    Feedback f
+JOIN 
+    Users u ON f.user_id = u.user_id
+JOIN 
+    Events e ON f.event_id = e.event_id
+WHERE 
+    f.rating < 3;
+................................
+SELECT title ,COUNT(session_id)
+FROM EVENTS e
+LEFT JOIN Session s ON e.event_id =s.event_id
+WHERE e.status='upcoming'
+
+GROUP BY event_id,e.title;
